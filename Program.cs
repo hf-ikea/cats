@@ -1,16 +1,11 @@
 using CATS;
 
-byte[] data = new byte[128];
-byte[] interleaved = new byte[128];
-byte[] deinterleaved = new byte[128];
-for(int i = 0; i < data.Length; i++)
-{
-    data[i] = (byte)i;
-}
+Identification id = new Identification("NO6H", 250, 0);
+byte[] idWhisker = id.Encode();
 
-Console.WriteLine("Original:      " + BitConverter.ToString(data));
-Interleaver inter = new Interleaver();
-interleaved = inter.Interleave(data);
-Console.WriteLine("Interleaved:   " + BitConverter.ToString(interleaved));
-deinterleaved = inter.Deinterleave(interleaved);
-Console.WriteLine("Deinterleaved: " + BitConverter.ToString(deinterleaved));
+Identification newId = new Identification();
+
+newId.Decode(idWhisker);
+
+Console.WriteLine(BitConverter.ToString(idWhisker));
+Console.WriteLine("Callsign: " + newId._call + ", SSID: " + newId._ssid + ", Icon: " + newId._icon);
