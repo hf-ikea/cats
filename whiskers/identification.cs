@@ -30,7 +30,7 @@ namespace CATS
         {
             byte[] encoded = new byte[5 + _callBytes.Length];
             encoded[0] = 0;
-            encoded[1] = (byte)encoded.Length;
+            encoded[1] = (byte)(encoded.Length - 2);
             encoded[2] = _iconBytes[0];
             encoded[3] = _iconBytes[1];
             for(int i = 0; i < _callBytes.Length; i++)
