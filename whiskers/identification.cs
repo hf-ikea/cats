@@ -1,7 +1,3 @@
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
-using System.Text;
-
 namespace CATS
 {
     public class Identification
