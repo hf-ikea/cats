@@ -18,3 +18,8 @@ Timestamp ts = new Timestamp(1099511627775);
 Console.WriteLine(BitConverter.ToString(ts._timeBytes));
 
 Console.WriteLine(BitConverter.ToString(ts.Encode()));
+
+Timestamp newTs = new Timestamp();
+newTs.Decode(ts.Encode());
+
+Console.WriteLine(newTs._time);
