@@ -28,16 +28,14 @@ namespace CATS
 
         public byte[] Encode()
         {
-            byte[] encoded = new byte[5 + _callBytes.Length];
+            int callLength = _callBytes.Length;
+            byte[] encoded = new byte[5 + callLength];
             encoded[0] = 0;
             encoded[1] = (byte)(encoded.Length - 2);
             encoded[2] = _iconBytes[0];
             encoded[3] = _iconBytes[1];
-            for(int i = 0; i < _callBytes.Length; i++)
-            {
-                encoded[i + 4] = _callBytes[i];
-            }
-            encoded[4 + _callBytes.Length] = _ssid;
+            Array.Copy(_callBytes, 0, encoded, 4, callLength);
+            encoded[4 + callLength] = _ssid;
             return encoded;
         }
 
