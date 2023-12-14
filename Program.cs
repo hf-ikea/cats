@@ -13,3 +13,10 @@ Console.WriteLine(BitConverter.ToString(c.encoded));
 Comment newC = new Comment();
 newC.Decode(c.encoded);
 Console.WriteLine(newC.comment);
+
+Destination d = new Destination("NO6H", 1, true, 1);
+d.Encode();
+Console.WriteLine(BitConverter.ToString(d.encoded));
+Destination newD = new Destination();
+newD.Decode(d.encoded);
+Console.WriteLine("Dest: " + newD.call + "~" + newD.ssid + " isAck? " + newD.isAck + " ackID: " + newD.ackID);
