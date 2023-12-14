@@ -8,7 +8,7 @@ namespace CATS
         {
             if(_comment.Length > 255)
             {
-                comment = _comment.Substring(0, 255);
+                comment = _comment[..255];
             } else
             {
                 comment = _comment;
