@@ -25,7 +25,7 @@ namespace CATS
 
         public Arbitrary Decode(byte[] _data)
         {
-            data = _data[2..];
+            data = _data[2..]; // set decoded payload to the incoming message array from index 2 (0 based) to the end
             return this;
         }
     }

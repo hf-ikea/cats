@@ -22,7 +22,6 @@ namespace CATS
             if(_ackID > 127 || (_isAck && _ackID == 0)) return;
             isAck = _isAck;
             ackID = _ackID;
-            // 10000000
         }
 
         public Destination()
