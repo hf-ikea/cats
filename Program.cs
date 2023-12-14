@@ -6,3 +6,10 @@ Console.WriteLine(BitConverter.ToString(gps.encoded));
 GPS newGPS = new GPS();
 newGPS.Decode(gps.encoded);
 Console.WriteLine("Lat: " + newGPS.latitude + " Long: " + newGPS.longitude + " Alt: " + newGPS.altitude + " LocErr: " + newGPS.locationError + " Heading: " + newGPS.heading + " Speed: " + newGPS.speed);
+
+Comment c = new Comment("sawyer");
+c.Encode();
+Console.WriteLine(BitConverter.ToString(c.encoded));
+Comment newC = new Comment();
+newC.Decode(c.encoded);
+Console.WriteLine(newC.comment);
