@@ -59,6 +59,7 @@ namespace CATS
         public string call;
         public byte ssid;
         public byte rssi;
+        public bool internet = false;
         public Hop(string _call, byte _ssid, float _rssi)
         {
             call = _call;
@@ -70,6 +71,12 @@ namespace CATS
         {
             call = _call;
             ssid = _ssid;
+        }
+        
+        public Hop(bool _internet)
+        {
+            call = "";
+            internet = _internet;
         }
 
         public Hop()
