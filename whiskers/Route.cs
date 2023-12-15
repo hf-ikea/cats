@@ -1,3 +1,5 @@
+using System.Data;
+
 namespace CATS
 {
     public enum HopType
@@ -11,8 +13,9 @@ namespace CATS
         public List<byte> hopList;
         public byte maxHops;
         public bool hasFuture;
-        public Route()
+        public Route(byte _maxHops)
         {
+            maxHops = _maxHops;
             hopList = new List<byte>(255);
         }
 
@@ -44,6 +47,7 @@ namespace CATS
             hopList.Add(0xFF);
             hopList.Add(pastHop.ssid);
             hopList.Add(pastHop.rssi);
+            Console.WriteLine(pastHop.rssi);
         }
 
         public void AddFutureHop(Hop futureHop)
@@ -63,7 +67,51 @@ namespace CATS
 
         public void IntellegentAddHop(Hop pastHop)
         {
+            Route newRoute = new Route(this.maxHops);
+        }
 
+        public IEnumerable<Hop> GetHopList()
+        {
+            int callStart = 0;
+            byte currentByte;
+            bool callFound = false;
+            List<byte> callBytes = new List<byte>();
+            for(int i = 0; i < hopList.Count;)
+            {
+                currentByte = hopList[i];
+                if(currentByte == 0xFE)
+                {
+                    Hop internetHop = new Hop(true);
+                    internetHop.hopType = HopType.Internet;
+                    yield return internetHop;
+                }
+                else if(currentByte != 0xFD && currentByte != 0xFF)
+                {
+                    if(!callFound)
+                    {
+                        callStart = i;
+                        callFound = true;
+                        callBytes.Clear();
+                    }
+                    callBytes.Add(currentByte);
+                }
+                else if(currentByte == 0xFD)
+                {
+                    callFound = false;
+                    i++;
+                    Hop futureHop = new Hop(System.Text.Encoding.UTF8.GetString(callBytes.ToArray()), hopList[i], HopType.Future);
+                    yield return futureHop;
+                }
+                else if(currentByte == 0xFF)
+                {
+                    callFound = false;
+                    i += 2;
+                    Hop pastHop = new Hop(System.Text.Encoding.UTF8.GetString(callBytes.ToArray()), hopList[i - 1], hopList[i], HopType.Past, false);
+                    yield return pastHop;
+                }
+
+                i++;
+            }
         }
     }
 
@@ -74,11 +122,41 @@ namespace CATS
         public byte ssid;
         public byte rssi;
         public bool internet = false;
+        public Hop(string _call, byte _ssid, byte _rssi, HopType _hopType, bool _convertRSSI = true)
+        {
+            call = _call;
+            ssid = _ssid;
+            if(_convertRSSI)
+            {
+                rssi = (byte)Math.Max(1.5 * _rssi + 240, 1);
+            }
+            else 
+            {
+                rssi = _rssi;
+            }
+            hopType = _hopType;
+        }
+
+        public Hop(string _call, byte _ssid, float _rssi, HopType _hopType)
+        {
+            call = _call;
+            ssid = _ssid;
+            rssi = (byte)Math.Max(1.5 * _rssi + 240, 1);
+            hopType = _hopType;
+        }
+
         public Hop(string _call, byte _ssid, float _rssi)
         {
             call = _call;
             ssid = _ssid;
-            rssi = (byte)Math.Max(_rssi * 1.5 + 240, 1);
+            rssi = (byte)Math.Max(1.5 * _rssi + 240, 1);
+        }
+
+        public Hop(string _call, byte _ssid, HopType _hopType)
+        {
+            call = _call;
+            ssid = _ssid;
+            hopType = _hopType;
         }
 
         public Hop(string _call, byte _ssid)
