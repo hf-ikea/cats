@@ -70,18 +70,77 @@ namespace CATS
             hopList.Add(0xFE);
         }
 
-        public void IntellegentAddHop(Hop pastHop)
+        public void IntellegentAddHop(Hop newHop)
         {
-            Route newRoute = new Route(this.maxHops);
+            Route newRoute = new(maxHops);
+            bool inserted = false;
+            foreach(Hop h in GetHopList())
+            {
+                switch(h.hopType)
+                {
+                    case HopType.Internet:
+                    {
+                        newRoute.AddInternetHop();
+                        break;
+                    }
+                    case HopType.Past:
+                    {
+                        if(h.call == newHop.call && h.ssid == newHop.ssid)
+                        {
+                            throw new Exception("New hop is a duplicate.");
+                        }
+                        else
+                        {
+                            newRoute.AddPastHop(h);
+                        }
+                        break;
+                    }
+                    case HopType.Future:
+                    {
+                        if(newHop.call == h.call && newHop.ssid == h.ssid)
+                        {
+                            if(inserted)
+                            {
+                                throw new Exception("New hop is a duplicate.");
+                            }
+                            else
+                            {
+                                newRoute.AddPastHop(h);
+                                inserted = true;
+                            }
+                        } else if(inserted)
+                        {
+                            newRoute.AddFutureHop(h);
+                        }
+                        else
+                        {
+                            throw new Exception("Cannot place hops (that have happened) after ones that have not already happened.");
+                        }
+                        break;
+                    }
+                }
+            }
+            if(!inserted)
+            {
+                newRoute.AddHop(newHop);
+            }
+
+            if(newRoute.GetHopList().Count() > newRoute.maxHops)
+            {
+                throw new Exception("Reached hop limit.");
+            }
+
+            hopList = newRoute.hopList;
+            hasFuture = newRoute.hasFuture;
         }
 
         public byte[] Encode()
         {
-            encoded = new byte[hopList.Count() + 3];
+            encoded = new byte[hopList.Count + 3];
             encoded[0] = 4;
-            encoded[1] = (byte)(hopList.Count() + 1);
+            encoded[1] = (byte)(hopList.Count + 1);
             encoded[2] = maxHops;
-            Array.Copy(hopList.ToArray(), 0, encoded, 3, hopList.Count());
+            Array.Copy(hopList.ToArray(), 0, encoded, 3, hopList.Count);
             return encoded;
         }
 
@@ -96,24 +155,24 @@ namespace CATS
 
         public IEnumerable<Hop> GetHopList()
         {
-            int callStart = 0;
             byte currentByte;
             bool callFound = false;
-            List<byte> callBytes = new List<byte>();
+            List<byte> callBytes = new();
             for(int i = 0; i < hopList.Count;)
             {
                 currentByte = hopList[i];
                 if(currentByte == 0xFE)
                 {
-                    Hop internetHop = new Hop(true);
-                    internetHop.hopType = HopType.Internet;
+                    Hop internetHop = new(true)
+                    {
+                        hopType = HopType.Internet
+                    };
                     yield return internetHop;
                 }
                 else if(currentByte != 0xFD && currentByte != 0xFF)
                 {
                     if(!callFound)
                     {
-                        callStart = i;
                         callFound = true;
                         callBytes.Clear();
                     }
@@ -123,15 +182,13 @@ namespace CATS
                 {
                     callFound = false;
                     i++;
-                    Hop futureHop = new Hop(System.Text.Encoding.UTF8.GetString(callBytes.ToArray()), hopList[i], HopType.Future);
-                    yield return futureHop;
+                    yield return new(System.Text.Encoding.UTF8.GetString(callBytes.ToArray()), hopList[i], HopType.Future);
                 }
                 else if(currentByte == 0xFF)
                 {
                     callFound = false;
                     i += 2;
-                    Hop pastHop = new Hop(System.Text.Encoding.UTF8.GetString(callBytes.ToArray()), hopList[i - 1], hopList[i], HopType.Past, false);
-                    yield return pastHop;
+                    yield return new(System.Text.Encoding.UTF8.GetString(callBytes.ToArray()), hopList[i - 1], hopList[i], HopType.Past, false);
                 }
 
                 i++;
