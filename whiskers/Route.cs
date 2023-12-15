@@ -178,7 +178,14 @@ namespace CATS
 
         public float GetRSSI()
         {
-            return (rssi - 240.0f) / 1.5f;
+            if(hopType == HopType.Internet || hopType == HopType.Future)
+            {
+                return 0;
+            }
+            else
+            {
+                return (rssi - 240.0f) / 1.5f;
+            }
         }
     }
 }
