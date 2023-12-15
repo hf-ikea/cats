@@ -10,9 +10,10 @@ namespace CATS
     {
         public List<byte> hopList;
         public byte maxHops;
+        public bool hasFuture;
         public Route()
         {
-            hopList = new List<byte>();
+            hopList = new List<byte>(255);
         }
 
         public List<byte> AddHop(Hop hop)
@@ -34,6 +35,11 @@ namespace CATS
 
         public void AddPastHop(Hop pastHop)
         {
+            if(hopList.Capacity - hopList.Count < pastHop.call.Length + 3) { return; }
+            if(hasFuture)
+            {
+                return; // you cant have something happen before something else is supposed to happen
+            }
             hopList.AddRange(System.Text.Encoding.UTF8.GetBytes(pastHop.call));
             hopList.Add(0xFF);
             hopList.Add(pastHop.ssid);
@@ -42,6 +48,8 @@ namespace CATS
 
         public void AddFutureHop(Hop futureHop)
         {
+            if(hopList.Capacity - hopList.Count < futureHop.call.Length + 2) { return; }
+            hasFuture = true;
             hopList.AddRange(System.Text.Encoding.UTF8.GetBytes(futureHop.call));
             hopList.Add(0xFD);
             hopList.Add(futureHop.ssid);
@@ -49,7 +57,13 @@ namespace CATS
 
         public void AddInternetHop()
         {
+            if(hopList.Capacity - hopList.Count < 1) { return; }
             hopList.Add(0xFE);
+        }
+
+        public void IntellegentAddHop(Hop pastHop)
+        {
+
         }
     }
 
