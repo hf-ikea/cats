@@ -47,7 +47,6 @@ namespace CATS
             hopList.Add(0xFF);
             hopList.Add(pastHop.ssid);
             hopList.Add(pastHop.rssi);
-            Console.WriteLine(pastHop.rssi);
         }
 
         public void AddFutureHop(Hop futureHop)
