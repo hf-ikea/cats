@@ -97,7 +97,7 @@ namespace CATS
                     }
                     case HopType.Future:
                     {
-                        if(newHop.call == h.call && newHop.ssid == h.ssid)
+                        if(h.call == newHop.call && h.ssid == newHop.ssid)
                         {
                             if(inserted)
                             {
