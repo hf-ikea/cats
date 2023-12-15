@@ -8,7 +8,11 @@ r.AddHop(h1);
 r.AddInternetHop();
 r.AddHop(h2);
 r.AddHop(h3);
-IEnumerable<Hop> iter = r.GetHopList();
+
+r.Encode();
+Route newR = new Route();
+newR.Decode(r.encoded);
+IEnumerable<Hop> iter = newR.GetHopList();
 
 foreach(Hop h in iter)
 {

@@ -13,10 +13,16 @@ namespace CATS
         public List<byte> hopList;
         public byte maxHops;
         public bool hasFuture;
+        public byte[] encoded = new byte[1] { 0 };
         public Route(byte _maxHops)
         {
             maxHops = _maxHops;
-            hopList = new List<byte>(255);
+            hopList = new List<byte>(254);
+        }
+
+        public Route()
+        {
+            hopList = new List<byte>(254);
         }
 
         public List<byte> AddHop(Hop hop)
@@ -67,6 +73,25 @@ namespace CATS
         public void IntellegentAddHop(Hop pastHop)
         {
             Route newRoute = new Route(this.maxHops);
+        }
+
+        public byte[] Encode()
+        {
+            encoded = new byte[hopList.Count() + 3];
+            encoded[0] = 4;
+            encoded[1] = (byte)(hopList.Count() + 1);
+            encoded[2] = maxHops;
+            Array.Copy(hopList.ToArray(), 0, encoded, 3, hopList.Count());
+            return encoded;
+        }
+
+        public Route Decode(byte[] data)
+        {
+            byte[] temp = new byte[data.Length - 3];
+            Array.Copy(data, 3, temp, 0, data[1] - 1);
+            hopList = temp.ToList();
+            maxHops = data[2];
+            return this;
         }
 
         public IEnumerable<Hop> GetHopList()
