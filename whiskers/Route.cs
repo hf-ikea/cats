@@ -1,5 +1,3 @@
-using System.Data;
-
 namespace CATS
 {
     public enum HopType

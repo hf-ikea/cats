@@ -111,8 +111,20 @@ namespace CATS
         {
             encoded = new byte[5 + variableBytes.Count];
             encoded[0] = 9;
-
+            encoded[1] = (byte)(variableBytes.Count + 3);
+            Array.Copy(bitmap, 0, encoded, 2, 3);
+            Array.Copy(variableBytes.ToArray(), 0, encoded, 5, variableBytes.Count);
             return encoded;
+        }
+
+        public NodeInfo Decode(byte[] data)
+        {
+            Array.Copy(data, 2, bitmap, 0, 3);
+            variableBytes = new List<byte>(254);
+            byte[] temp = new byte[data[1] - 3];
+            Array.Copy(data, 5, temp, 0, data[1] - 3);
+            variableBytes.AddRange(temp);
+            return this;
         }
     }
 }
