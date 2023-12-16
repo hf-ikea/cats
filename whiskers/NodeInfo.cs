@@ -1,5 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
-
 namespace CATS
 {
     public class NodeInfo
@@ -12,7 +10,7 @@ namespace CATS
 
         }
 
-        public void CreateBitmap(List<Variable> list)
+        public uint GetBitmap(List<Variable> list)
         {
             uint bits = 0;
             foreach(Variable v in list)
@@ -21,6 +19,16 @@ namespace CATS
                 bits |= (uint)(1 << (int)v.type);
             }
             bitmap = BitConverter.GetBytes(bits);
+            return bits; 
+        }
+
+        public uint GetBitmap(Variable v)
+        {
+            if((uint)v.type > 23) throw new Exception("Type is not valid");
+            uint bits = BitConverter.ToUInt32(bitmap);
+            bits |= (uint)(1 << (int)v.type);
+            bitmap = BitConverter.GetBytes(bits);
+            return bits; 
         }
 
         private void PushUVariable(Variable v)
