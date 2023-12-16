@@ -60,7 +60,7 @@ namespace CATS
 
             latitude = latitudeEncoded / 23860929.4222;
             longitude = longitudeEncoded / 11930464.7111;
-            heading = (headingEncoded / 128.0) * 180;
+            heading = headingEncoded / 128.0 * 180;
             return this;
         }
     }
