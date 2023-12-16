@@ -1,4 +1,11 @@
 # CATS C# Implementation
-* im no good at c#
-* this is cool: https://gitlab.scd31.com/cats/cats-standard/-/blob/master/standard.pdf
-* this too: https://gitlab.scd31.com/cats/ham-cats
+* Hopefully will be complete to standard
+* please please tell me if you use this (not required but i would like to see your project)
+* CATS standard: https://gitlab.scd31.com/cats/cats-standard/-/blob/master/standard.pdf
+* Rust reference implementation: https://gitlab.scd31.com/cats/ham-cats
+
+### TODO:
+* nodeinfo bitmap + data
+* crc (16bit IBM SDLC)
+* ldpc
+* header + packet construction
