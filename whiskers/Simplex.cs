@@ -2,22 +2,6 @@ using System.Text;
 
 namespace CATS
 {
-    public enum Modulation
-    {
-        Unknown,
-        CATS,
-        FM,
-        AM,
-        USB,
-        LSB,
-        CW,
-        FreeDV,
-        M17,
-        DSTAR,
-        DMR,
-        Fusion,
-        P25
-    }
     public class Simplex
     {
         public uint frequency;
