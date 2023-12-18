@@ -5,7 +5,6 @@
 * Rust reference implementation: https://gitlab.scd31.com/cats/ham-cats
 
 ### TODO:
-* nodeinfo bitmap + data
 * crc (16bit IBM SDLC)
 * ldpc
 * header + packet construction
