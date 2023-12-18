@@ -58,7 +58,7 @@ namespace CATS
         {
             uint bits = t.downlinkCode | (Convert.ToUInt32(t.downlinkDCS) << 11);
             bits |= (t.uplinkCode << 12) | (Convert.ToUInt32(t.uplinkDCS) << 23);
-            toneBytes = BitConverter.GetBytes(bits);
+            Array.Copy(BitConverter.GetBytes(bits), 0, toneBytes, 0, 3);
         }
 
         public ToneInfo GetTones()

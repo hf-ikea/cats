@@ -1,14 +1,14 @@
 using CATS;
 
-NodeInfo i = new NodeInfo();
-List<Variable> list = new();
-
-
-list.Add(new Variable(VariableType.TrancieverTemp, -4));
-list.Add(new Variable(VariableType.Uptime, 2));
-list.Add(new Variable(VariableType.AntennaGain, 4));
-list.Add(new Variable(VariableType.SWID, 1));
-list.Add(new Variable(VariableType.HWID, 0));
-list.Add(new Variable(VariableType.AntennaHeight, 3));
-
-Console.WriteLine(Convert.ToString(i.GetBitmap(list), 2));
+NodeInfo i = new();
+List<Variable> list = new()
+{
+    new Variable(VariableType.TrancieverTemp, -4),
+    new Variable(VariableType.Uptime, 2),
+    new Variable(VariableType.AntennaGain, 4),
+    new Variable(VariableType.SWID, 1),
+    new Variable(VariableType.HWID, 0),
+    new Variable(VariableType.AntennaHeight, 3),
+    new Variable(VariableType.Voltage, 3)
+};
+i.GetBitmap(list);

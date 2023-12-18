@@ -3,7 +3,7 @@ namespace CATS
     public class NodeInfo
     {
         public byte[] bitmap = new byte[3];
-        public List<byte> variableBytes = new List<byte>(254);
+        public List<byte> variableBytes = new(254);
         public byte[] encoded = new byte[1];
         public NodeInfo()
         {
@@ -18,7 +18,7 @@ namespace CATS
                 if((uint)v.type > 23) throw new Exception("Type is not valid");
                 bits |= (uint)(1 << (int)v.type);
             }
-            bitmap = BitConverter.GetBytes(bits);
+            Array.Copy(BitConverter.GetBytes(bits), 0, bitmap, 0, 3);
             return bits; 
         }
 
@@ -27,7 +27,7 @@ namespace CATS
             if((uint)v.type > 23) throw new Exception("Type is not valid");
             uint bits = BitConverter.ToUInt32(bitmap);
             bits |= (uint)(1 << (int)v.type);
-            bitmap = BitConverter.GetBytes(bits);
+            Array.Copy(BitConverter.GetBytes(bits), 0, bitmap, 0, 3);
             return bits; 
         }
 
@@ -37,7 +37,7 @@ namespace CATS
             switch(v.type)
             {
                 case VariableType.HWID:
-                    if(x > UInt16.MaxValue) throw new Exception("Value too large");
+                    if(x > ushort.MaxValue) throw new Exception("Value too large");
                     variableBytes.AddRange(BitConverter.GetBytes(x));
                     break;
                 case VariableType.SWID:
@@ -45,7 +45,7 @@ namespace CATS
                     variableBytes.Add((byte)x);
                     break;
                 case VariableType.Uptime:
-                    if(x > UInt32.MaxValue) throw new Exception("Value too large");
+                    if(x > uint.MaxValue) throw new Exception("Value too large");
                     variableBytes.AddRange(BitConverter.GetBytes(x));
                     break;
                 case VariableType.AntennaHeight:
@@ -105,6 +105,13 @@ namespace CATS
             {
                 PushVariable(v);
             }
+        }
+
+        public List<Variable> GetVariableList()
+        {
+            List<Variable> varList = new();
+            
+            return varList;
         }
 
         public byte[] Encode()
