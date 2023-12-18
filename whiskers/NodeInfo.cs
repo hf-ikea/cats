@@ -5,10 +5,7 @@ namespace CATS
         public byte[] bitmap = new byte[3];
         public List<byte> variableBytes = new(254);
         public byte[] encoded = new byte[1];
-        public NodeInfo()
-        {
-
-        }
+        public NodeInfo() {}
 
         public uint GetBitmap(List<Variable> list)
         {
