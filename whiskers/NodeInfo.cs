@@ -38,7 +38,7 @@ namespace CATS
             {
                 case VariableType.HWID:
                     if(x > ushort.MaxValue) throw new Exception("Value too large");
-                    variableBytes.AddRange(BitConverter.GetBytes(x));
+                    variableBytes.AddRange(BitConverter.GetBytes((ushort)x));
                     break;
                 case VariableType.SWID:
                     if(x > byte.MaxValue) throw new Exception("Value too large");
@@ -116,6 +116,58 @@ namespace CATS
                 if(bits[i])
                 {
                     varList.Add(new Variable((VariableType)i, 0));
+                }
+            }
+
+            foreach(byte b in variableBytes)
+            {
+                Console.WriteLine(b);
+            }
+
+            int k = 0;
+            byte[] temp = new byte[4];
+            foreach(Variable v in varList)
+            {
+                switch(v.type)
+                {
+                    case VariableType.HWID:
+                        variableBytes.CopyTo(k, temp, 0, 2);
+                        v.value = BitConverter.ToUInt16(temp);
+                        k += 2;
+                        break;
+                    case VariableType.SWID:
+                        v.value = variableBytes[k];
+                        k += 1;
+                        break;
+                    case VariableType.Uptime:
+                        variableBytes.CopyTo(k, temp, 0, 4);
+                        v.value = BitConverter.ToUInt32(temp);
+                        k += 4;
+                        break;
+                    case VariableType.AntennaHeight:
+                        v.value = variableBytes[k];
+                        k += 1;
+                        break;
+                    case VariableType.AntennaGain:
+                        v.value = variableBytes[k] / 4;
+                        k += 1;
+                        break;
+                    case VariableType.TXPower:
+                        v.value = variableBytes[k] / 4;
+                        k += 1;
+                        break;
+                    case VariableType.Voltage:
+                        v.value = variableBytes[k] / 10;
+                        k += 1;
+                        break;
+                    case VariableType.TrancieverTemp:
+                        v.value = (sbyte)variableBytes[k];
+                        k += 1;
+                        break;
+                    case VariableType.BatteryCharge:
+                        v.value = (long)(variableBytes[k] / 2.55f);
+                        k += 1;
+                        break;
                 }
             }
             return varList;
