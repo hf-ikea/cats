@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Numerics;
+
 namespace CATS
 {
     public class NodeInfo
@@ -107,7 +110,14 @@ namespace CATS
         public List<Variable> GetVariableList()
         {
             List<Variable> varList = new();
-            
+            BitArray bits = new(bitmap);
+            for(int i = 0; i < bits.Length; i++)
+            {
+                if(bits[i])
+                {
+                    varList.Add(new Variable((VariableType)i, 0));
+                }
+            }
             return varList;
         }
 

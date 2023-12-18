@@ -12,3 +12,8 @@ List<Variable> list = new()
     new Variable(VariableType.Voltage, 3)
 };
 i.GetBitmap(list);
+
+foreach(Variable v in i.GetVariableList())
+{
+    Console.WriteLine(v.type.ToString());
+}
