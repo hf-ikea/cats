@@ -4,7 +4,6 @@ namespace CATS
     {
         // 16 bit ibm sdlc crc
         // https://gist.github.com/bryc/79d1a62304773285317191f1ae5aa5b8
-
         // uses a reflected 0x1021 polynomial (0x8408)
         // inverted (xor with 0xFFFF)
         public ushort CRCRemainder(byte[] data)
