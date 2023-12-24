@@ -9,15 +9,15 @@ namespace CATS
         public static ushort CRCRemainder(byte[] data)
         {
             uint t = 0;
-            uint crc = 0xFFFF;
+            uint crc = 0xFFFF; // start state
             for(uint i = 0; i < data.Length; i++)
             {
-                crc &= 0xFFFF;
+                crc &= 0xFFFF; // remove bits over 16
                 t = crc ^ data[i];
                 t = (t ^ (t << 4)) & 0xFF;
                 crc = (crc >> 8) ^ (t << 8) ^ (t >> 4) ^ (t << 3);
             }
-            return (ushort)~crc;
+            return (ushort)~crc; // xor the output with 0xFFFF (invert)
         }
     }
 }
