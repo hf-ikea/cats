@@ -27,6 +27,8 @@ namespace CATS
 
         public static IEnumerable<Whisker> GetWhiskers(byte[] packet)
         {
+            if(packet.Length > 8191) throw new Exception("Packet too long!");
+
             int maxEnum = Enum.GetValues(typeof(WhiskerType)).Cast<int>().Max(); // get max int of enum
             for(int i = 0; i < packet.Length; i++)
             {
