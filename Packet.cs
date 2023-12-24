@@ -11,7 +11,7 @@ namespace CATS
         // after crc
         public byte[] SemiEncode()
         {
-            ushort CRC = CATS.CRC.GetChecksum(bytes);
+            ushort crc = CRC.GetChecksum(bytes);
             byte[] encoded = new byte[bytes.Count + 2];
 
             return encoded;
@@ -29,9 +29,8 @@ namespace CATS
 
         public void SemiDecode(byte[] data)
         {
-            ushort expectedCRC = 0;
-            ushort recievedCRC = 0;
-
+            ushort expectedCRC = CRC.GetChecksum(data[..^3]);
+            ushort recievedCRC = BitConverter.ToUInt16(data.AsSpan()[^2..]);
             if(expectedCRC != recievedCRC) throw new Exception("CRC does not match!");
         }
 
