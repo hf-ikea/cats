@@ -1,18 +1,32 @@
-using System.Net;
-
 namespace CATS
 {
     public class Whitener
     {
-
         public static byte[] Whiten(byte[] data)
         {
-            byte[] white = new byte[16] {0xE9, 0xCF, 0x67, 0x20, 0x19, 0x1A, 0x07, 0xDC, 0xC0, 0x72, 0x79, 0x97, 0x51, 0xF7, 0xDD, 0x93};
+            ushort start_state = 59855;
+            ushort state = start_state;
+
             for(int i = 0; i < data.Length; i++)
             {
-                data[i] ^= white[i % 15];
+                byte output = 0;
+                for(int j = 8; j--> 0;)
+                {
+                    output |= (byte)((state & 1) << j);
+                    state = AdvanceLFSR(state);
+                }
+                data[i] ^= output;
             }
+            
             return data;
+        }
+
+        public static ushort AdvanceLFSR(ushort state)
+        {
+            ushort lsb = (ushort)(state & 1);
+            state >>= 1;
+            if(lsb > 0) { state ^= 0xB400; }
+            return state;
         }
     }
 }

@@ -1,5 +1,8 @@
 using CATS;
 
-byte[] test = "123456789"u8.ToArray();
-
-Console.WriteLine(CRC.CRCRemainder(test));
+byte[] data = new byte[16];
+for(byte i = 0; i < data.Length; i++)
+{
+    data[i] = i;
+}
+byte[] outputData = Whitener.Whiten(data);
