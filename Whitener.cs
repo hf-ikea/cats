@@ -26,7 +26,7 @@ namespace CATS
         {
             ushort lsb = (ushort)(state & 1);  // get least significant bit of state
             state >>= 1;                       // shift the register one time to the right
-            if(lsb > 0) { state ^= 0xB400; }   // toggle taps at 16, 14, 13, 11, 1 if the LSB is one
+            if(lsb > 0) { state ^= 0xB400; }   // toggle taps at 16, 14, 13, 11 if the LSB is one
             return state;
         }
     }
