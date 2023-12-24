@@ -1,8 +1,8 @@
 namespace CATS
 {
-    public class Interleaver
+    public static class Interleaver
     {
-        public byte[] Interleave(byte[] data)
+        public static byte[] Interleave(byte[] data)
         {
             byte[] interleaved = new byte[data.Length];
 
@@ -24,7 +24,7 @@ namespace CATS
             return interleaved;
         }
 
-        public byte[] Deinterleave(byte[] data)
+        public static byte[] Deinterleave(byte[] data)
         {
             byte[] deinterleaved = new byte[data.Length];
 
