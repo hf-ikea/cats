@@ -27,14 +27,15 @@ namespace CATS
 
         public static IEnumerable<Whisker> GetWhiskers(byte[] packet)
         {
+            int maxEnum = Enum.GetValues(typeof(WhiskerType)).Cast<int>().Max(); // get max int of enum
             for(int i = 0; i < packet.Length; i++)
             {
-                switch(packet[i])
+                if(packet[i] <= maxEnum)
                 {
-                    case 1:
-                        byte length = packet[++i];
-                        
-                        break;
+                    WhiskerType type = (WhiskerType)packet[i];
+                    int length = packet[i] + 2;
+                    yield return new Whisker(type, packet[i..(i + length)]);
+                    i += length;
                 }
             }
         }

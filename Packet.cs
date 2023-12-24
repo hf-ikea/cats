@@ -40,7 +40,10 @@ namespace CATS
 
             if(data.Length > 8191) throw new Exception("Packet too long!");
 
-            
+            foreach(Whisker w in Whisker.GetWhiskers(data))
+            {
+                
+            }
         }
 
         // decodes entire packet without header

@@ -26,7 +26,7 @@ namespace CATS
 
         public byte[] Encode()
         {
-            encoded = new byte[5 + call.Length];
+            encoded = new byte[call.Length + 5];
             encoded[0] = 0;
             encoded[1] = (byte)(call.Length + 3);
             encoded[2] = iconBytes[0];
