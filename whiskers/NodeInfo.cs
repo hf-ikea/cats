@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Numerics;
-
 namespace CATS
 {
     public class NodeInfo

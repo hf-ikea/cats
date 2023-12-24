@@ -2,7 +2,11 @@ namespace CATS
 {
     public class Packet
     {
-        public List<byte> bytes = new List<byte>(8191);
+        public List<byte> bytes = new(8191);
+        public bool hasIdentification = false;
+        public bool hasTimestamp = false;
+        public bool hasGPS = false;
+        public bool hasRoute = false;
 
         public Packet()
         {
@@ -13,7 +17,7 @@ namespace CATS
         {
             ushort crc = CRC.GetChecksum(bytes);
             byte[] encoded = new byte[bytes.Count + 2];
-
+            
             return encoded;
         }
 
@@ -27,11 +31,16 @@ namespace CATS
             return Interleaver.Interleave(data);
         }
 
-        public void SemiDecode(byte[] data)
+        public void SemiDecode(byte[] packet)
         {
-            ushort expectedCRC = CRC.GetChecksum(data[..^3]);
-            ushort recievedCRC = BitConverter.ToUInt16(data.AsSpan()[^2..]);
+            byte[] data = packet[..^3];
+            ushort expectedCRC = CRC.GetChecksum(data);
+            ushort recievedCRC = BitConverter.ToUInt16(packet.AsSpan()[^2..]);
             if(expectedCRC != recievedCRC) throw new Exception("CRC does not match!");
+
+            if(data.Length > 8191) throw new Exception("Packet too long!");
+
+            
         }
 
         // decodes entire packet without header

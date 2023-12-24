@@ -28,7 +28,7 @@ namespace CATS
         {
             encoded = new byte[5 + call.Length];
             encoded[0] = 0;
-            encoded[1] = (byte)(encoded.Length - 2);
+            encoded[1] = (byte)(call.Length + 3);
             encoded[2] = iconBytes[0];
             encoded[3] = iconBytes[1];
             Array.Copy(System.Text.Encoding.UTF8.GetBytes(call), 0, encoded, 4, call.Length);
