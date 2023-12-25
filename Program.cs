@@ -11,4 +11,8 @@ List<Whisker> list = new()
 
 byte[] bytes = Packet.SemiEncode(list);
 
-Console.WriteLine(BitConverter.ToString(bytes));
+foreach(Whisker w in Packet.SemiDecode(bytes))
+{
+    Console.WriteLine(w.type.ToString());
+}
+

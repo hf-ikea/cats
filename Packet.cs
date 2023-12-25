@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace CATS
 {
     public class Packet
@@ -8,8 +10,6 @@ namespace CATS
             List<byte> bytes = new(8189);
             foreach(Whisker w in whiskerList)
             {
-                bytes.Add((byte)w.type);
-                Console.WriteLine("{0:X2}", (byte)w.type);
                 bytes.AddRange(w.data);
             }
 
@@ -34,7 +34,7 @@ namespace CATS
 
         public static List<Whisker> SemiDecode(byte[] packet)
         {
-            byte[] data = packet[..^3];
+            byte[] data = packet[..^2];
             ushort expectedCRC = CRC.GetChecksum(data);
             ushort recievedCRC = BitConverter.ToUInt16(packet.AsSpan()[^2..]);
             if(expectedCRC != recievedCRC) throw new Exception("CRC does not match!");
@@ -52,18 +52,22 @@ namespace CATS
                     case WhiskerType.Identification:
                         if(hasIdentification) throw new Exception("Duplicate identification whiskers!");
                         whiskers.Add(w);
+                        hasIdentification = true;
                         break;
                     case WhiskerType.Timestamp:
                         if(hasTimestamp) throw new Exception("Duplicate timestamp whiskers!");
                         whiskers.Add(w);
+                        hasTimestamp = true;
                         break;
                     case WhiskerType.GPS:
                         if(hasGPS) throw new Exception("Duplicate GPS whiskers!");
                         whiskers.Add(w);
+                        hasGPS = true;
                         break;
                     case WhiskerType.Route:
                         if(hasRoute) throw new Exception("Duplicate route whiskers!");
                         whiskers.Add(w);
+                        hasRoute = true;
                         break;
                     default:
                         whiskers.Add(w);

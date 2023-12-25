@@ -37,8 +37,8 @@ namespace CATS
                 if(packet[i] <= maxEnum)
                 {
                     WhiskerType type = (WhiskerType)packet[i];
-                    int length = packet[i] + 2;
-                    yield return new Whisker(type, packet[i..(i + length)]);
+                    int length = packet[++i];
+                    yield return new Whisker(type, packet[i..(i + length + 1)]);
                     i += length;
                 }
             }
