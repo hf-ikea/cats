@@ -9,12 +9,14 @@ namespace CATS
             foreach(Whisker w in whiskerList)
             {
                 bytes.Add((byte)w.type);
+                Console.WriteLine("{0:X1}", (byte)w.type);
                 bytes.AddRange(w.data);
             }
 
             if(bytes.Count + 2 > 8191) throw new Exception("Packet is too long!");
 
             byte[] encoded = new byte[bytes.Count + 2];
+            Array.Copy(bytes.ToArray(), encoded, bytes.Count);
             Array.Copy(BitConverter.GetBytes(CRC.GetChecksum(bytes)), 0, encoded, bytes.Count, 2);
             
             return encoded;

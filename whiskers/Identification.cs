@@ -47,5 +47,10 @@ namespace CATS
             icon = BitConverter.ToUInt16(iconBytes);
             return this;
         }
+
+        public static implicit operator Identification?(Type? v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

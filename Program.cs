@@ -1,9 +1,14 @@
 using CATS;
 
-byte[] data = new byte[16];
-for(byte i = 0; i < data.Length; i++)
+List<Whisker> list = new()
 {
-    data[i] = i;
-}
-byte[] outputData = Whitener.Whiten(data);
-Console.WriteLine(BitConverter.ToString(Whitener.Whiten(outputData)));
+    new Whisker(WhiskerType.Identification, new Identification("N0CALL", 1, 1).Encode()),
+    new Whisker(WhiskerType.Timestamp, new Timestamp(1703470519).Encode()),
+    new Whisker(WhiskerType.Comment, new Comment("sawyer").Encode())
+};
+
+
+
+byte[] bytes = Packet.SemiEncode(list);
+
+Console.WriteLine(BitConverter.ToString(bytes));
