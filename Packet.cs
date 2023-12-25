@@ -9,7 +9,7 @@ namespace CATS
             foreach(Whisker w in whiskerList)
             {
                 bytes.Add((byte)w.type);
-                Console.WriteLine("{0:X1}", (byte)w.type);
+                Console.WriteLine("{0:X2}", (byte)w.type);
                 bytes.AddRange(w.data);
             }
 
