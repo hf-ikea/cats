@@ -29,7 +29,7 @@ namespace CATS
         {
             if(packet.Length > 8191) throw new Exception("Packet too long!");
 
-            int maxEnum = Enum.GetValues(typeof(WhiskerType)).Cast<int>().Max(); // get max int of enum
+            int maxEnum = Enum.GetValues(typeof(WhiskerType)).Cast<int>().Max();
             for(int i = 0; i < packet.Length; i++)
             {
                 if(packet[i] <= maxEnum)
