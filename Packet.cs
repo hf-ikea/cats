@@ -98,5 +98,23 @@ namespace CATS
 
             return list;
         }
+
+        public static byte[] AddHeader(byte[] data)
+        {
+            ushort dataLength = (ushort)data.Length;
+            if(dataLength > 8191) throw new Exception("Packet is too long! Size: " + dataLength);
+            byte[] packet = new byte[dataLength + 10];
+            packet[0] = 0x55;
+            packet[1] = 0x55;
+            packet[2] = 0x55;
+            packet[3] = 0x55;
+            packet[4] = 0xAB;
+            packet[5] = 0xCD;
+            packet[6] = 0xEF;
+            packet[7] = 0x12;
+            Array.Copy(BitConverter.GetBytes((ushort)65535), 0, packet, 8, 2);
+            Array.Copy(data, 0, packet, 10, dataLength);
+            return packet;
+        }
     }
 }

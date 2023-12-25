@@ -11,8 +11,11 @@ List<Whisker> list = new()
 
 byte[] bytes = Packet.SemiEncode(list);
 
+byte[] packet = Packet.AddHeader(bytes);
+
 foreach(Whisker w in Packet.SemiDecode(bytes))
 {
     Console.WriteLine(w.type.ToString());
 }
 
+Console.WriteLine(BitConverter.ToString(packet));
